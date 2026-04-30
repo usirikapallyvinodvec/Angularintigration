@@ -1,0 +1,135 @@
+﻿
+
+DataBase information Realted This Project:
+------------------------------------------
+
+
+
+create table vinod.Roles(
+RoleId serial primary key,
+RoleName varchar(100) not null unique
+)
+
+INSERT INTO vinod.Roles (RoleName) VALUES
+('User'),
+('Moderator'),
+('Admin');
+
+select * from vinod.Roles
+
+-----------------------------------------------------------------------ProjectSocialDb
+
+create table vinod.Users
+(
+UserId serial primary key,
+FullName varchar(100),
+Email varchar(100),
+Mobile varchar(100),
+Password varchar(200),
+RoleId int,
+IsActive boolean default true,
+createDate Timestamp default now(),
+constraint fk_usersroles
+foreign key(RoleId) references vinod.Roles(RoleId)
+)
+
+select * from vinod.Users
+
+
+ALTER TABLE vinod.Users
+ADD CONSTRAINT uq_users_email UNIQUE (Email);
+
+ALTER TABLE vinod.Users
+ADD CONSTRAINT uq_users_password UNIQUE (Password);
+
+------------------------------------------------------------------------
+
+
+CREATE TABLE vinod.Posts
+(
+    PostId SERIAL PRIMARY KEY,
+    UserId INT,
+    Title VARCHAR(200),
+    Description TEXT,
+    UserName VARCHAR(100),
+    IsAnonymous BOOLEAN DEFAULT FALSE,
+    Status VARCHAR(20) DEFAULT 'Pending',
+    ApprovedBy INT,
+    RejectedBy INT,
+    RejectedReason VARCHAR(500),
+    IsPinned BOOLEAN DEFAULT FALSE,
+    CreatedDate TIMESTAMP DEFAULT now(),
+
+    CONSTRAINT FK_Posts_Users
+    FOREIGN KEY (UserId) REFERENCES vinod.Users(UserId),
+
+    CONSTRAINT FK_Posts_ApprovedBy
+    FOREIGN KEY (ApprovedBy) REFERENCES vinod.Users(UserId),
+
+    CONSTRAINT FK_Posts_RejectedBy
+    FOREIGN KEY (RejectedBy) REFERENCES vinod.Users(UserId),
+
+    CONSTRAINT CHK_Posts_Status
+    CHECK (Status IN ('Pending', 'Approved', 'Rejected'))
+);
+
+Select * from vinod.Posts
+
+
+------------------------------------------------------------------------------
+
+CREATE TABLE vinod.PostFiles
+(
+    FileId SERIAL PRIMARY KEY,
+    PostId INT,
+    FileName VARCHAR(255),
+    FileType VARCHAR(50),
+    FilePath VARCHAR(500),
+    FileUrl VARCHAR(500),
+    UploadedDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT FK_PostFiles_Posts
+    FOREIGN KEY (PostId) REFERENCES vinod.Posts(PostId)
+);
+
+Select * from vinod.PostFiles
+-------------------------------------------------------------------------------------------
+
+CREATE TABLE vinod.ChatMessages
+(
+    MessageId SERIAL PRIMARY KEY,
+
+    SenderUserId INT NOT NULL,
+
+    ReceiverUserId INT NOT NULL,
+
+    Message TEXT NOT NULL,
+
+    SentDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    IsRead BOOLEAN DEFAULT FALSE,
+
+    CONSTRAINT FK_Chat_Sender
+    FOREIGN KEY (SenderUserId)
+    REFERENCES vinod.Users(UserId),
+
+    CONSTRAINT FK_Chat_Receiver
+    FOREIGN KEY (ReceiverUserId)
+    REFERENCES vinod.Users(UserId)
+);
+
+
+
+
+select * from vinod.ChatMessages
+
+select * from vinod.Users
+
+Select * from vinod.PostFiles
+
+Select * from vinod.Posts
+
+select * from vinod.chatmessages
+
+
+

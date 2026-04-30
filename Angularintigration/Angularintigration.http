@@ -1,0 +1,6 @@
+@Angularintigration_HostAddress = http://localhost:5278
+
+GET {{Angularintigration_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
