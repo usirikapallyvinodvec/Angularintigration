@@ -6,10 +6,8 @@ using Angularintigration.RepositryPattern.Interfaces;
 using Angularintigration.Servicepattern.Implementation;
 using Angularintigration.Servicepattern.Interfaces;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 
 builder.Services.AddControllers();
 builder.Services.AddSignalR();
@@ -27,7 +25,6 @@ builder.Services.AddScoped<IChatServices, ChatServices>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngular",
-        policy =>
         {
             policy.AllowAnyOrigin()
                   .AllowAnyHeader()
