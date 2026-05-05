@@ -23,7 +23,7 @@ namespace Angularintigration.Controllers
         }
 
         [HttpPut("updatepost")]
-        public async Task<IActionResult> UpdatePost([FromForm] EditPostModel model)
+        public async Task<IActionResult> UpdatePost(EditPostModel model)
         {
             var result = await _service.UpdatePost(model);
 
@@ -66,9 +66,7 @@ namespace Angularintigration.Controllers
             }
         }
         [HttpDelete("deletepost")]
-        public async Task<IActionResult> DeletePost(
-      int PostId,
-  int UserId)
+        public async Task<IActionResult> DeletePost(int PostId,int UserId)
         {
             var model = new DeletePostModel
             {
@@ -107,10 +105,7 @@ namespace Angularintigration.Controllers
         }
 
         [HttpPut("rejectpost")]
-        public async Task<IActionResult> RejectPost(
-        int postId,
-        int moderatorId,
-        string reason)
+        public async Task<IActionResult> RejectPost(int postId,int moderatorId,string reason)
         {
             await _service.RejectPost(postId, moderatorId, reason);
 

@@ -17,17 +17,8 @@ namespace Angularintigration.Repositories
 
         public async Task<dynamic> LoginDetails(Login login)
         {
-            var query = @"select userid,
-                                 fullname,
-                                 email,
-                                 roleid
-                          from vinod.users
-                          where email = @Email
-                          and password = @Password
-                          and isactive = true";
-
-            using var connection = _context.Getconn();
-
+            var query = @"select userid,fullname,email,roleid,isactive from vinod.users where email = @Email and password = @Password";
+            using var connection = _context.Getconn();  
             return await connection.QueryFirstOrDefaultAsync(query, login);
         }
     }

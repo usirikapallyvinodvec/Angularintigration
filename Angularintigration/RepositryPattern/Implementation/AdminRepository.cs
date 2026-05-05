@@ -57,23 +57,47 @@ namespace Angularintigration.RepositryPattern.Implementation
         {
             using var connection = _context.Getconn();
 
-                        var query = @"
-                SELECT p.postid,
-                       p.title,
-                       p.username,
-                       p.description,
-                       p.createddate,
-                       p.ispinned,
-                       f.fileurl,
-                       f.filetype
-                FROM vinod.posts p
-                LEFT JOIN vinod.postfiles f
-                       ON p.postid = f.postid
-                WHERE p.status = 'Approved'
-                ORDER BY p.ispinned DESC,
-                         p.createddate DESC;";
+            var postDict = new Dictionary<int, dynamic>();
 
-            return await connection.QueryAsync(query);
+            var result = await connection.QueryAsync(@"
+        SELECT p.postid, p.title, p.username, p.description,
+               p.createddate, p.ispinned,
+               f.fileurl, f.filetype
+        FROM vinod.posts p
+        LEFT JOIN vinod.postfiles f ON p.postid = f.postid
+        WHERE p.status = 'Approved'
+        ORDER BY p.ispinned DESC, p.createddate DESC;
+    ");
+
+            foreach (var row in result)
+            {
+                if (!postDict.TryGetValue((int)row.postid, out var post))
+                {
+                    post = new
+                    {
+                        postid = row.postid,
+                        title = row.title,
+                        username = row.username,
+                        description = row.description,
+                        createddate = row.createddate,
+                        ispinned = row.ispinned,
+                        files = new List<dynamic>()
+                    };
+
+                    postDict.Add((int)row.postid, post);
+                }
+
+                if (row.fileurl != null)
+                {
+                    post.files.Add(new
+                    {
+                        fileurl = row.fileurl,
+                        filetype = row.filetype
+                    });
+                }
+            }
+
+            return postDict.Values;
         }
 
         public async Task<ReportModel> GetReports()
@@ -124,7 +148,7 @@ namespace Angularintigration.RepositryPattern.Implementation
             var query = @"
             UPDATE vinod.users
             SET isactive = NOT isactive
-            WHERE userid = @UserId;"; //using Toggle Condition
+            WHERE userid = @UserId;"; 
 
             return await connection.ExecuteAsync(query, new
             {

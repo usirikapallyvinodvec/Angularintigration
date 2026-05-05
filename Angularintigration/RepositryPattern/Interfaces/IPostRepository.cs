@@ -5,13 +5,9 @@ namespace Angularintigration.RepositryPattern.Interfaces
     public interface IPostRepository
     {
         Task<int> AddPost(PostModel postModel);
-
         Task<IEnumerable<dynamic>> GetHomePosts(int page, int pageSize);
-
         Task<IEnumerable<dynamic>> GetMyPosts(int userId);
-
         Task<dynamic> GetPostById(int id);
-
         Task<int> UpdatePost(EditPostModel model);
         Task<int> DeletePost(DeletePostModel model);
         Task<IEnumerable<dynamic>> GetPendingPosts();

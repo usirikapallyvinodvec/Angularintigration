@@ -1,6 +1,6 @@
-﻿using Angularintigration.Models;
+﻿using Angularintigration.Hubs;
+using Angularintigration.Models;
 using Angularintigration.Servicepattern.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Angularintigration.Controllers
@@ -11,26 +11,32 @@ namespace Angularintigration.Controllers
     {
         private readonly IChatServices _service;
 
-        public ChatController(IChatServices service)
+        public ChatController(
+            IChatServices service)
         {
             _service = service;
         }
+
         [HttpGet("users/{userId}")]
-        public async Task<IActionResult> GetUsers(int userId)
+        public async Task<IActionResult>
+        GetUsers(int userId)
         {
             var result =
-                await _service.GetUsers(userId);
-            return Ok(result);
+                await _service.GetUsers(
+                    userId);
 
+            return Ok(result);
         }
+
+        
         [HttpGet("history")]
         public async Task<IActionResult>
-       GetChatHistory(
-           int senderId,
-           int receiverId)
+        GetChatHistory(
+            int senderId,
+            int receiverId)
         {
             var result =
-                await _service.getChatHistory(
+                await _service.GetChatHistory(
                     senderId,
                     receiverId);
 
@@ -42,14 +48,32 @@ namespace Angularintigration.Controllers
             [FromBody]
             ChatMessageModel model)
         {
+            if (model == null)
+            {
+                return BadRequest(
+                    "Invalid Data");
+            }
+
             var result =
-                await _service.SaveMessage(model);
+                await _service.SaveMessage(
+                    model);
 
             return Ok(new
             {
                 message = "Message Sent",
                 rows = result
             });
+        }
+
+  
+        [HttpGet("onlineusers")]
+        public IActionResult
+        GetOnlineUsers()
+        {
+            var users =
+                ChatHub.GetOnlineUsers();
+
+            return Ok(users);
         }
     }
 }

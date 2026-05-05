@@ -16,7 +16,7 @@ namespace Angularintigration.Controllers
             _service = service;
         }
         [HttpPost]
-        public async Task<IActionResult> LoginPost([FromBody] Login model)
+        public async Task<IActionResult> LoginPost(Login model)
         {
             var result = await _service.LoginDetails(model);
 
@@ -27,7 +27,13 @@ namespace Angularintigration.Controllers
                     message = "Invalid Email or Password"
                 });
             }
-
+            if (result.isactive == false)
+            {
+                return BadRequest(new
+                {
+                    message = "Your Account is Blocked"
+                });
+            }
             return Ok(new
             {
                 message = "Login Success",

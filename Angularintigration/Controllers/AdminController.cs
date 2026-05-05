@@ -14,12 +14,17 @@ namespace Angularintigration.Controllers
         {
             _service = service;
         }
+
+
+
         [HttpGet("users")]
         public async Task<IActionResult> GetUsers()
         {
             var result = await _service.GetUsers();
             return Ok(result);
         }
+
+     
 
         [HttpPut("changerole")]
         public async Task<IActionResult> ChangeRole(
@@ -33,6 +38,8 @@ namespace Angularintigration.Controllers
                 message = "Role Updated"
             });
         }
+
+
         [HttpPut("toggleuser")]
         public async Task<IActionResult> ToggleUser(int userId)
         {

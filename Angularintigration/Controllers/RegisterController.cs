@@ -16,7 +16,7 @@ namespace Angularintigration.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RegistrationPost([FromBody] RegistrationPage registrationPage)
+        public async Task<IActionResult> RegistrationPost(RegistrationPage registrationPage)
         {
           
             if (registrationPage.Password != registrationPage.ConfirmPassword)

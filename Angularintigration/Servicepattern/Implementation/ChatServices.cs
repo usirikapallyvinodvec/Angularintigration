@@ -8,24 +8,33 @@ namespace Angularintigration.Servicepattern.Implementation
     {
         private readonly IChatRepository _context;
 
-        public ChatServices(IChatRepository context)
+        public ChatServices(
+            IChatRepository context)
         {
             _context = context;
         }
-
-        public Task<IEnumerable<dynamic>> getChatHistory(int senderId, int receiverId)
+        public Task<IEnumerable<dynamic>>
+        GetChatHistory(
+            int senderId,
+            int receiverId)
         {
-            return _context.getChatHistory(senderId, receiverId);
+            return _context.GetChatHistory(
+                senderId,
+                receiverId);
+        }
+        public Task<IEnumerable<dynamic>>
+        GetUsers(int userId)
+        {
+            return _context.GetUsers(
+                userId);
         }
 
-        public Task<IEnumerable<dynamic>> GetUsers(int userId)
+        public Task<int>
+        SaveMessage(
+            ChatMessageModel chatIR)
         {
-            return _context.GetUsers(userId);
-        }
-
-        public Task<int> SaveMessage(ChatMessageModel chatIR)
-        {
-            return _context.SaveMessage(chatIR);
+            return _context.SaveMessage(
+                chatIR);
         }
     }
 }
