@@ -8,7 +8,6 @@ using Angularintigration.Servicepattern.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 builder.Services.AddControllers();
 builder.Services.AddSignalR();
 builder.Services.AddScoped<DapperContext>();
@@ -24,7 +23,7 @@ builder.Services.AddScoped<IChatRepository, ChatRepository>();
 builder.Services.AddScoped<IChatServices, ChatServices>();
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAngular",
+    options.AddPolicy("AllowAngular", policy =>
         {
             policy.AllowAnyOrigin()
                   .AllowAnyHeader()
